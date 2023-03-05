@@ -84,17 +84,11 @@ export default function Home() {
     ],
   };
 
-  const images = [
-    "/images/schild.jpeg",
-    "/images/schild.jpeg",
-    "/images/schild.jpeg",
-    "/images/schild.jpeg",
-    "/images/schild.jpeg",
-  ].map((src) => {
+  const images = (id: number) => {
     const image = new Image();
-    image.src = src;
+    image.src = "/images/verkehrszeichen/" + id + ".png";
     return image;
-  });
+  };
 
   const options: any = {
     indexAxis: "x" as const,
@@ -156,7 +150,7 @@ export default function Home() {
       const yAxis = chart.scales["y"];
       xAxis.ticks.forEach((value, index) => {
         var x = xAxis.getPixelForTick(index);
-        ctx.drawImage(images[index], x - 25, yAxis.bottom + 25, 50, 50);
+        ctx.drawImage(images(index), x - 25, yAxis.bottom + 25, 50, 50);
       });
     },
   };
