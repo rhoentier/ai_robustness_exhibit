@@ -23,6 +23,7 @@ services:
   backend:
     build: ./backend
     restart: always
+    runtime: nvidia
     labels:
       - traefik.enable=true
       - traefik.http.routers.backend.rule=PathPrefix("/api/")
@@ -37,10 +38,19 @@ services:
       - traefik.http.routers.backend.middlewares=backend-stripprefix@docker
     environment:
       - PYTHONUNBUFFERED=1
+      - START_Y=100
+      - START_X=100
+      - END_Y=600
+      - END_X=600
+      - CAMERA_ID=6
+      - NVIDIA_VISIBLE_DEVICES=all
     networks:
       - traefik-network
-    # devices:
-    #   - /dev/video0
+    devices:
+      - /dev/video6
+    volumes:
+      - /usr/local/cuda:/usr/local/cuda
+
 
   frontend:
     build: ./frontend

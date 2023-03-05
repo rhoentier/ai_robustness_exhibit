@@ -29,34 +29,67 @@ ChartJS.register(
   Legend
 );
 
+function convertToBase64(buffer: ArrayBuffer | undefined) {
+  if (buffer === undefined) return "";
+  var binary = "";
+  const bytes = new Uint8Array(buffer);
+  const len = bytes.byteLength;
+  for (var i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  const result = "data:image/image/png;base64," + window.btoa(binary);
+  return result;
+}
+
+function getBestClasses(newClassification: any): Map<number, number> {
+  if (newClassification === undefined) return new Map();
+  const maxValues: Map<number, number> = new Map();
+  var transientArray = [...newClassification];
+  for (let index = 0; index < 5; index++) {
+    const element = Math.max(...transientArray);
+    const elementIndex = newClassification.indexOf(element);
+    maxValues.set(elementIndex, element * 100);
+    transientArray.splice(transientArray.indexOf(element), 1);
+  }
+  console.log(Array.from(maxValues.keys()));
+  return maxValues;
+}
+
 const socket = io({
   path: "/api/socket.io",
   transports: ["websocket"],
+  reconnectionDelayMax: 1000,
+  timeout: 1000,
 });
 
+const images = (id: number) => {
+  const image = new Image();
+  image.src = "/images/verkehrszeichen/" + id + ".png";
+  return image;
+};
+
 export default function Home() {
+  const [image, setImage] = useState(undefined);
+  const [classification, setClassification] = useState(undefined);
+  const [heatmap, setHeatmap] = useState(undefined);
+
   useEffect(() => {
     const interval = setInterval(() => {
-      // socket.emit("image");
-      // socket.emit("classification");
-      // socket.emit("heatmap");
-      socket.emit("message");
+      socket.emit("image");
+      socket.emit("classification");
+      socket.emit("heatmap");
     }, 100);
 
     socket.on("image", (value) => {
-      console.log(value);
+      setImage(value);
     });
 
     socket.on("classification", (value) => {
-      console.log(value);
+      setClassification(value[0]);
     });
 
     socket.on("heatmap", (value) => {
-      console.log(value);
-    });
-
-    socket.on("message", (value) => {
-      console.log(value);
+      setHeatmap(value);
     });
 
     return () => {
@@ -65,14 +98,14 @@ export default function Home() {
       socket.off("heatmap");
       clearInterval(interval);
     };
-  }, []);
+  }, [classification]);
 
   const data = {
-    labels: ["1", "2", "3", "4", "5"],
+    labels: Array.from(getBestClasses(classification).keys()),
     datasets: [
       {
         label: "Image labels",
-        data: [70, 20, 10, 5, 5],
+        data: Array.from(getBestClasses(classification).values()),
         backgroundColor: [
           "#ffee00",
           "#ffffff",
@@ -82,12 +115,6 @@ export default function Home() {
         ],
       },
     ],
-  };
-
-  const images = (id: number) => {
-    const image = new Image();
-    image.src = "/images/verkehrszeichen/" + id + ".png";
-    return image;
   };
 
   const options: any = {
@@ -121,6 +148,11 @@ export default function Home() {
         },
       },
     },
+    layout: {
+      padding: {
+        top: 30,
+      },
+    },
     responsive: true,
     plugins: {
       legend: { display: false },
@@ -135,6 +167,7 @@ export default function Home() {
         font: { size: 14, weight: "bold" },
         anchor: "end",
         align: "end",
+        z: 100,
         padding: { top: 3, bottom: 3, left: 5, right: 5 },
         formatter: Math.round,
       },
@@ -150,7 +183,13 @@ export default function Home() {
       const yAxis = chart.scales["y"];
       xAxis.ticks.forEach((value, index) => {
         var x = xAxis.getPixelForTick(index);
-        ctx.drawImage(images(index), x - 25, yAxis.bottom + 25, 50, 50);
+        ctx.drawImage(
+          images(Number(value.label)),
+          x - 25,
+          yAxis.bottom + 25,
+          50,
+          50
+        );
       });
     },
   };
@@ -171,7 +210,7 @@ export default function Home() {
             overflow={"hidden"}
             border="2px solid #ffee00"
           >
-            <ReactImage src="/images/schild.jpeg" h="100%" w="100%" />
+            <ReactImage src={convertToBase64(image)} h="100%" w="100%" />
           </Box>
           <Box
             h={"55vh"}
@@ -180,14 +219,13 @@ export default function Home() {
             overflow={"hidden"}
             border="2px solid #ffee00"
           >
-            <ReactImage src="/images/schild.jpeg" h="100%" w="100%" />
+            <ReactImage src={convertToBase64(heatmap)} h="100%" w="100%" />
           </Box>
         </HStack>
         <Box
           h={"30vh"}
           w={"115vh"}
           borderRadius="30px"
-          overflow={"hidden"}
           border="2px solid #ffee00"
           background={"#e84911"}
           p="20px"
