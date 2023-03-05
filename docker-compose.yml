@@ -1,0 +1,58 @@
+version: "3"
+
+services:
+  reverse-proxy:
+    depends_on:
+      - backend
+      - frontend
+    image: traefik:v2.9
+    command:
+      - --log.level=DEBUG
+      - --api.insecure=true
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --accesslog
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - traefik-network
+
+  backend:
+    build: ./backend
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.backend.rule=PathPrefix("/api/")
+      - traefik.docker.network=traefik-network
+      - traefik.http.services.backend.loadbalancer.server.port=9000
+      - traefik.http.services.backend.loadbalancer.sticky.cookie=true
+      - traefik.http.services.backend.loadbalancer.sticky.cookie.name=io
+      - traefik.http.services.backend.loadbalancer.sticky.cookie.httponly=true
+      - traefik.http.services.backend.loadbalancer.sticky.cookie.secure=true
+      - traefik.http.services.backend.loadbalancer.sticky.cookie.samesite=io
+      - traefik.http.middlewares.backend-stripprefix.stripprefix.prefixes=/api/
+      - traefik.http.routers.backend.middlewares=backend-stripprefix@docker
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - traefik-network
+    # devices:
+    #   - /dev/video0
+
+  frontend:
+    build: ./frontend
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.frontend.rule=PathPrefix("/")
+      - traefik.docker.network=traefik-network
+      - traefik.http.services.frontend.loadbalancer.server.port=3000
+    networks:
+      - traefik-network
+
+networks:
+  traefik-network:
+    name: traefik-network
