@@ -28,7 +28,14 @@ def run_image_loop():
         global image
         time.sleep(0.1)
         try:
-            image = webcam.get_image()
+            rotated_image = webcam.get_image()
+            (h, w) = rotated_image.shape[:2]
+            center = (w / 2, h / 2)
+            M = cv2.getRotationMatrix2D(center, 180, 1.0)
+            image = cv2.warpAffine(rotated_image, M, (w, h))
+
+            cv2.imshow("test", image)
+            cv2.waitKey(0)
         finally:
             pass
 
