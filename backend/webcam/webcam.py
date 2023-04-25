@@ -8,12 +8,12 @@ import os
 
 class Webcam:
     def __init__(self):
-        self.q = queue.Queue()
+        self.que = queue.Queue()
 
-        self.start_y = 0
-        self.end_y = 200
-        self.start_x = 0
-        self.end_x = 200
+        self.start_y = 100
+        self.end_y = 220
+        self.start_x = 420
+        self.end_x = 540
         self.camera_id = 0
 
         if "START_Y" in os.environ:
@@ -37,12 +37,12 @@ class Webcam:
             ret, frame = self.cap.read()
             if not ret:
                 break
-            if not self.q.empty():
+            if not self.que.empty():
                 try:
-                    self.q.get_nowait()
+                    self.que.get_nowait()
                 except queue.Empty:
                     pass
-            self.q.put(frame)
+            self.que.put(frame)
 
     def get_image(self):
-        return self.q.get()[self.start_y:self.end_y, self.start_x:self.end_x]
+        return self.que.get()[self.start_y:self.end_y, self.start_x:self.end_x]

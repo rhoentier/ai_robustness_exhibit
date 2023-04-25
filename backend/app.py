@@ -2,7 +2,6 @@ import threading
 import time
 
 import cv2
-import numpy as np
 from flask import Flask
 from flask_socketio import emit, SocketIO
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -33,9 +32,6 @@ def run_image_loop():
             center = (w / 2, h / 2)
             M = cv2.getRotationMatrix2D(center, 180, 1.0)
             image = cv2.warpAffine(rotated_image, M, (w, h))
-
-            cv2.imshow("test", image)
-            cv2.waitKey(0)
         finally:
             pass
 
