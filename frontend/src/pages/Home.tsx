@@ -55,8 +55,8 @@ function getBestClasses(newClassification: any): Map<number, number> {
   return maxValues;
 }
 
-const socket = io({
-  path: "/api/socket.io",
+const socket = io("http://localhost:9000", {
+  path: "/socket.io",
   transports: ["websocket"],
   reconnectionDelayMax: 1000,
   timeout: 1000,

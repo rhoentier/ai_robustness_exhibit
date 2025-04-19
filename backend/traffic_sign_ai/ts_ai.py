@@ -7,6 +7,7 @@ from torch import optim
 from traffic_sign_ai.models.models import InceptionNet3
 
 
+
 class TSAI:
 
     def __init__(self,
@@ -17,7 +18,7 @@ class TSAI:
                  lr=1e-4):
         self.name = name_for_save
 
-        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        self.device = torch.device("cuda:0" if torch.cuda.is_available() else ("mps" if torch.backends.mps.is_available() else "cpu"))
 
         self.net = net
 
