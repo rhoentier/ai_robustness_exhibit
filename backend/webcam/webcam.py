@@ -10,10 +10,10 @@ class Webcam:
     def __init__(self):
         self.que = queue.Queue()
 
-        self.start_y = 100
-        self.end_y = 220
-        self.start_x = 420
-        self.end_x = 540
+        self.start_y = 0
+        self.end_y = 1024
+        self.start_x = 0
+        self.end_x = 1024
         self.camera_id = 0
 
         if "START_Y" in os.environ:

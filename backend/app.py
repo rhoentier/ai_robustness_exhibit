@@ -2,6 +2,8 @@ import threading
 import time
 
 import cv2
+import numpy as np
+import torch
 from flask import Flask
 from flask_socketio import emit, SocketIO
 from werkzeug.middleware.proxy_fix import ProxyFix
