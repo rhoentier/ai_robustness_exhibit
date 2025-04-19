@@ -1,17 +1,15 @@
-FROM python:3.10
-
-COPY ./requirements.txt /app/requirements.txt
+FROM python:3.13.3-alpine
 
 WORKDIR /app
-RUN apt update
-RUN apt install -y libgl1
 
-RUN pip3 install torch torchvision
-RUN pip3 install -r requirements.txt
+COPY requirements.txt .
 
-COPY . /app
+RUN apk add --no-cache libgl && \
+    pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+COPY ../frontend/build/ ./build/
+
 EXPOSE 9000
 
-ENTRYPOINT ["python"]
-
-CMD ["app.py"]
+CMD ["python", "app.py"]
