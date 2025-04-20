@@ -6,8 +6,6 @@ from torch import optim
 
 from traffic_sign_ai.models.models import InceptionNet3
 
-
-
 class TSAI:
 
     def __init__(self,

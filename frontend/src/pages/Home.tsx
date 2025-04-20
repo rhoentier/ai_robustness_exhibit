@@ -31,10 +31,10 @@ ChartJS.register(
 
 function convertToBase64(buffer: ArrayBuffer | undefined) {
   if (buffer === undefined) return "";
-  var binary = "";
+  let binary = "";
   const bytes = new Uint8Array(buffer);
   const len = bytes.byteLength;
-  for (var i = 0; i < len; i++) {
+  for (let i = 0; i < len; i++) {
     binary += String.fromCharCode(bytes[i]);
   }
   const result = "data:image/image/png;base64," + window.btoa(binary);
@@ -44,7 +44,7 @@ function convertToBase64(buffer: ArrayBuffer | undefined) {
 function getBestClasses(newClassification: any): Map<number, number> {
   if (newClassification === undefined) return new Map();
   const maxValues: Map<number, number> = new Map();
-  var transientArray = [...newClassification];
+  let transientArray = [...newClassification];
   for (let index = 0; index < 5; index++) {
     const element = Math.max(...transientArray);
     const elementIndex = newClassification.indexOf(element);
@@ -69,34 +69,31 @@ const images = (id: number) => {
 };
 
 export default function Home() {
-  const [image, setImage] = useState(undefined);
+  const [imageBase64, setImageBase64] = useState<string>("");
   const [classification, setClassification] = useState(undefined);
-  const [heatmap, setHeatmap] = useState(undefined);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const image_interval = setInterval(() => {
       socket.emit("image");
+    }, 50);
+
+    const classification_interval = setInterval(() => {
       socket.emit("classification");
-      socket.emit("heatmap");
-    }, 100);
+    }, 500);
 
     socket.on("image", (value) => {
-      setImage(value);
+      setImageBase64(convertToBase64(value));
     });
 
     socket.on("classification", (value) => {
       setClassification(value[0]);
     });
 
-    socket.on("heatmap", (value) => {
-      setHeatmap(value);
-    });
-
     return () => {
       socket.off("image");
       socket.off("classification");
-      socket.off("heatmap");
-      clearInterval(interval);
+      clearInterval(image_interval);
+      clearInterval(classification_interval);
     };
   }, [classification]);
 
@@ -182,7 +179,7 @@ export default function Home() {
       const xAxis = chart.scales["x"];
       const yAxis = chart.scales["y"];
       xAxis.ticks.forEach((value, index) => {
-        var x = xAxis.getPixelForTick(index);
+        let x = xAxis.getPixelForTick(index);
         ctx.drawImage(
           images(Number(value.label)),
           x - 25,
@@ -210,16 +207,7 @@ export default function Home() {
             overflow={"hidden"}
             border="2px solid #ffee00"
           >
-            <ReactImage src={convertToBase64(image)} h="100%" w="100%" />
-          </Box>
-          <Box
-            h={"55vh"}
-            w={"55vh"}
-            borderRadius="30px"
-            overflow={"hidden"}
-            border="2px solid #ffee00"
-          >
-            <ReactImage src={convertToBase64(heatmap)} h="100%" w="100%" />
+            <ReactImage src={imageBase64} h="100%" w="100%" />
           </Box>
         </HStack>
         <Box

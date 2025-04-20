@@ -1,13 +1,8 @@
 import warnings
 
-import torchvision
-import torchvision.transforms as transforms
-from torch.utils.data import DataLoader
-
 from traffic_sign_ai.ts_ai import TSAI
 
 warnings.simplefilter(action="ignore", category=UserWarning)
-
 
 class TrafficSignMain:
     def __init__(self, model: TSAI, epochs, image_size=299, num_classes=43) -> None:

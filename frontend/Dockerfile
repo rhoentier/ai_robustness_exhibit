@@ -1,13 +1,11 @@
-FROM node:lts
+FROM node:22.14.0-alpine
 
-ENV PORT=3000
+WORKDIR /app
 
-WORKDIR /frontend
-
-COPY package.json /frontend/package.json
-COPY package-lock.json /frontend/package-lock.json
+COPY package*.json ./
 
 RUN npm ci
 
-COPY . /frontend/
-CMD ["npm", "start"]
+COPY . .
+
+RUN npm run build

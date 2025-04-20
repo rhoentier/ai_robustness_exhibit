@@ -27,19 +27,13 @@ Feel free to use this code within another exhibition. Please open an issue to li
 
 You can start the software via docker compose.
 
-**MacOs:**
 ```
-docker compose -f docker-compose.mac.yml up -d
-```
-
-**Linux**
-```
-docker compose -f docker-compose.nvidia.yml up  -d
+docker compose -f docker-compose.yml up  -d
 ```
 
 You can configure the camera settings in the docker-compose files.
 
-Open `localhost:3000` in your web browser.
+Open `localhost:9000` in your web browser.
 
 ### Develop Software
 

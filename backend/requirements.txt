@@ -3,4 +3,5 @@ numpy==2.2.4
 flask==2.2.2
 flask-socketio==5.5.1
 torch==2.6.0
-torchvision==0.21.0 
+torchvision==0.21.0
+Werkzeug==2.2.2

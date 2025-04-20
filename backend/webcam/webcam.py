@@ -11,19 +11,16 @@ class Webcam:
         self.que = queue.Queue()
 
         self.start_y = 0
-        self.end_y = 1024
         self.start_x = 0
-        self.end_x = 1024
+        self.image_size = 1024
         self.camera_id = 0
 
         if "START_Y" in os.environ:
             self.start_y = int(os.environ["START_Y"])
-        if "END_Y" in os.environ:
-            self.end_y = int(os.environ["END_Y"])
         if "START_X" in os.environ:
             self.start_x = int(os.environ["START_X"])
-        if "END_X" in os.environ:
-            self.end_x = int(os.environ["END_X"])
+        if "IMAGE_SIZE" in os.environ:
+            self.image_size = int(os.environ["IMAGE_SIZE"])
         if "CAMERA_ID" in os.environ:
             self.camera_id = int(os.environ["CAMERA_ID"])
 
@@ -45,4 +42,7 @@ class Webcam:
             self.que.put(frame)
 
     def get_image(self):
-        return self.que.get()[self.start_y:self.end_y, self.start_x:self.end_x]
+        return self.que.get()[
+            self.start_y : self.start_y + self.image_size,
+            self.start_x : self.start_x + self.image_size,
+        ]
