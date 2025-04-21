@@ -85,4 +85,11 @@ def get_classification():
 if __name__ == "__main__":
     start_background_thread()
 
-    socketio.run(app, port=9000, host="0.0.0.0", debug=True, allow_unsafe_werkzeug=True, use_reloader=False)
+    socketio.run(
+        app,
+        port=9000,
+        host="0.0.0.0",
+        debug=True,
+        allow_unsafe_werkzeug=True,
+        use_reloader=False,
+    )

@@ -1,9 +1,13 @@
 import {
   Box,
   VStack,
-  HStack,
   Image as ReactImage,
   Flex,
+  Grid,
+  GridItem,
+  Heading,
+  Text,
+  Button,
 } from "@chakra-ui/react";
 import {
   Chart as ChartJS,
@@ -17,7 +21,7 @@ import {
 } from "chart.js";
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import ChartDataLabels, { Context } from "chartjs-plugin-datalabels";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 import { io } from "socket.io-client";
 
 ChartJS.register(
@@ -51,7 +55,6 @@ function getBestClasses(newClassification: any): Map<number, number> {
     maxValues.set(elementIndex, element * 100);
     transientArray.splice(transientArray.indexOf(element), 1);
   }
-  console.log(Array.from(maxValues.keys()));
   return maxValues;
 }
 
@@ -70,7 +73,8 @@ const images = (id: number) => {
 
 export default function Home() {
   const [imageBase64, setImageBase64] = useState<string>("");
-  const [classification, setClassification] = useState(undefined);
+  const [classification, setClassification] = useState<Map<number, number>>();
+  const [language, setLanguage] = useState<"de" | "en">("de");
 
   useEffect(() => {
     const image_interval = setInterval(() => {
@@ -86,7 +90,7 @@ export default function Home() {
     });
 
     socket.on("classification", (value) => {
-      setClassification(value[0]);
+      setClassification(getBestClasses(value[0]));
     });
 
     return () => {
@@ -98,17 +102,21 @@ export default function Home() {
   }, [classification]);
 
   const data = {
-    labels: Array.from(getBestClasses(classification).keys()),
+    labels: classification
+      ? Array.from(classification.keys())
+      : [0, 0, 0, 0, 0],
     datasets: [
       {
         label: "Image labels",
-        data: Array.from(getBestClasses(classification).values()),
+        data: classification
+          ? Array.from(classification.values())
+          : [0, 0, 0, 0, 0],
         backgroundColor: [
-          "#ffee00",
-          "#ffffff",
-          "#ffffff",
-          "#ffffff",
-          "#ffffff",
+          "#FF6835",
+          "#FF6835",
+          "#FF6835",
+          "#FF6835",
+          "#FF6835",
         ],
       },
     ],
@@ -116,28 +124,25 @@ export default function Home() {
 
   const options: any = {
     indexAxis: "x" as const,
-    elements: {
-      bar: {
-        borderWidth: 0,
-      },
+    animation: {
+      duration: 2000,
     },
+    elements: {},
     scales: {
       x: {
-        grid: {
-          color: "rgba(255, 255, 255, 0.3)",
-        },
         ticks: {
-          color: "rgba(255, 255, 255, 1)",
+          color: "rgba(0,0,0,0)",
           padding: 30,
         },
       },
       y: {
+        position: "right",
         suggestedMax: 100,
         grid: {
-          color: "rgba(255, 255, 255, 0.3)",
+          color: "#b9b2aa",
         },
         ticks: {
-          color: "rgba(255, 255, 255, 1)",
+          color: "#b9b2aa",
           font: {
             size: 14,
           },
@@ -154,18 +159,11 @@ export default function Home() {
     plugins: {
       legend: { display: false },
       datalabels: {
-        color: "#e84911",
-        backgroundColor: function (context: Context) {
-          return context.dataset.backgroundColor;
-        },
-        borderColor: "white",
-        borderRadius: 4,
-        borderWidth: 2,
-        font: { size: 14, weight: "bold" },
+        color: "black",
+        font: { family: "SpaceGrotesk", size: 15, weight: "bold" },
         anchor: "end",
         align: "end",
         z: 100,
-        padding: { top: 3, bottom: 3, left: 5, right: 5 },
         formatter: Math.round,
       },
     },
@@ -174,10 +172,11 @@ export default function Home() {
 
   const imageAsLabel: Plugin = {
     id: "imageAsLabel",
-    afterDraw: (chart) => {
+    beforeDatasetDraw: (chart) => {
       const ctx = chart.ctx;
       const xAxis = chart.scales["x"];
       const yAxis = chart.scales["y"];
+      
       xAxis.ticks.forEach((value, index) => {
         let x = xAxis.getPixelForTick(index);
         ctx.drawImage(
@@ -195,37 +194,96 @@ export default function Home() {
     <Flex
       height={"100vh"}
       width={"100vw"}
-      bgImage={"/images/robota_bauwand.jpg"}
+      bgColor={"#E8E1D7"}
       justifyContent="center"
     >
-      <VStack spacing={"5vh"} justifyContent="center">
-        <HStack spacing={"5vh"}>
-          <Box
-            h={"55vh"}
-            w={"55vh"}
-            borderRadius="30px"
-            overflow={"hidden"}
-            border="2px solid #ffee00"
-          >
-            <ReactImage src={imageBase64} h="100%" w="100%" />
-          </Box>
-        </HStack>
-        <Box
-          h={"30vh"}
-          w={"115vh"}
-          borderRadius="30px"
-          border="2px solid #ffee00"
-          background={"#e84911"}
-          p="20px"
+      <Flex
+        marginTop={"8vh"}
+        marginBottom={"5vh"}
+        marginX={"80px"}
+        borderBottom={"1px"}
+        borderTop={"1px"}
+        paddingY={"5vh"}
+        width={"100%"}
+      >
+        <Grid
+          templateRows="repeat(2, 1fr)"
+          templateColumns="repeat(3, 1fr)"
+          gap="5vh"
+          width={"100%"}
         >
-          <Bar
-            color="white"
-            options={options}
-            data={data}
-            plugins={[ChartDataLabels, imageAsLabel]}
-          />
-        </Box>
-      </VStack>
+          <GridItem rowSpan={2} colSpan={1}>
+            <VStack
+              justifyContent={"space-between"}
+              alignItems={"flex-start"}
+              height={"100%"}
+              pr={"20px"}
+              pb={"00px"}
+            >
+              {language === "de" ? (
+                <Heading fontSize={"80px"} lineHeight={"96px"}>
+                  DIE KI FAHRSCHULE
+                </Heading>
+              ) : (
+                <Heading fontSize={"60px"} lineHeight={"86px"}>
+                  THE AI DRIVING SCHOOL
+                </Heading>
+              )}
+
+              <VStack alignItems={"flex-start"} gap="50px">
+                {language === "de" ? (
+                  <Text fontSize={"18px"} lineHeight={"30px"}>
+                    Die Wahrscheinlichkeit, die dieses Exponat anzeigt, basieren
+                    auf den Ergebnissen eines KI-Modells, das auf einer Vielzahl
+                    von Verkehrszeichen trainiert wurde. Die Werte spiegeln die
+                    Unsicherheit und Variabilität wider, die bei der
+                    Interpretation von Verkehrszeichen auftreten können.
+                  </Text>
+                ) : (
+                  <Text fontSize={"18px"} lineHeight={"30px"}>
+                    The probabilities shown in this exhibit are based on the
+                    results of an AI model that has been trained on a large
+                    number of traffic signs. The values reflect the uncertainty
+                    and variability that can occur when interpreting traffic
+                    signs.
+                  </Text>
+                )}
+                <Button
+                  backgroundColor={"#DBC0A7"}
+                  fontSize={"22px"}
+                  fontWeight={"400"}
+                  px="35px"
+                  borderRadius={"30px"}
+                  height={"50px"}
+                  onClick={() => setLanguage(language === "de" ? "en" : "de")}
+                >
+                  {language === "de" ? "ENGLISH" : "DEUTSCH"}
+                </Button>
+              </VStack>
+            </VStack>
+          </GridItem>
+          <GridItem colSpan={2} rowSpan={1}>
+            <Box h={"47vh"} w={"47vh"} borderRadius="30px" overflow={"hidden"}>
+              <ReactImage src={imageBase64} h="100%" w="100%" />
+            </Box>
+          </GridItem>
+          <GridItem
+            display={"flex"}
+            colSpan={2}
+            rowSpan={1}
+            alignItems={"flex-end"}
+          >
+            <Box h={"25vh"} w={"100%"} background={"none"}>
+              <Bar
+                color="#b3aca4"
+                options={options}
+                data={data}
+                plugins={[ChartDataLabels, imageAsLabel]}
+              />
+            </Box>
+          </GridItem>
+        </Grid>
+      </Flex>
     </Flex>
   );
 }
