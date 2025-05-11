@@ -15,10 +15,13 @@ services:
       - CAMERA_ID=0
       - NVIDIA_VISIBLE_DEVICES=all
     devices:
+      - /dev/video1
       - /dev/video0
     volumes:
       - /usr/local/cuda:/usr/local/cuda
       - frontend_build:/app/build
+    ports:
+      - 9000:9000
     depends_on:
       - frontend
 
