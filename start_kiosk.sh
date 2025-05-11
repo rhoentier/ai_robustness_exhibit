@@ -1,5 +1,6 @@
 #!/bin/bash
-docker-compose up -d
+docker compose up -d
+sleep 10
 
 startx /usr/bin/openbox-session -- -nocursor &
 sleep 5
