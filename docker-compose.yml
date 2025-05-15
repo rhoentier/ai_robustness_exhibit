@@ -11,6 +11,7 @@ services:
       - PYTHONUNBUFFERED=1
       - START_Y=0
       - START_X=0
+      - ROTATION = 180
       - IMAGE_SIZE=1024
       - CAMERA_ID=0
       - NVIDIA_VISIBLE_DEVICES=all

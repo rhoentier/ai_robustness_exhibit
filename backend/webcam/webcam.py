@@ -14,6 +14,7 @@ class Webcam:
         self.start_x = 0
         self.image_size = 1024
         self.camera_id = 0
+        self.rotation = 0
 
         if "START_Y" in os.environ:
             self.start_y = int(os.environ["START_Y"])
@@ -23,6 +24,8 @@ class Webcam:
             self.image_size = int(os.environ["IMAGE_SIZE"])
         if "CAMERA_ID" in os.environ:
             self.camera_id = int(os.environ["CAMERA_ID"])
+        if "ROTATION" in os.environ:
+            self.rotation = int(os.environ["ROTATION"])
 
         self.cap = cv2.VideoCapture(self.camera_id)
         t = threading.Thread(target=self._reader)
@@ -42,7 +45,12 @@ class Webcam:
             self.que.put(frame)
 
     def get_image(self):
-        return self.que.get()[
+        image = self.que.get()[
             self.start_y : self.start_y + self.image_size,
             self.start_x : self.start_x + self.image_size,
         ]
+        (h, w) = image.shape[:2]
+        center = (w / 2, h / 2)
+        M = cv2.getRotationMatrix2D(center, self.rotation, 1.0)
+        image = cv2.warpAffine(image, M, (w, h))
+        return image
