@@ -111,11 +111,11 @@ export default function Home() {
           ? Array.from(classification.values())
           : [0, 0, 0, 0, 0],
         backgroundColor: [
-          "rgb(226,183,153)",
-          "rgb(226,183,153)",
-          "rgb(226,183,153)",
-          "rgb(226,183,153)",
-          "#rgb(226,183,153)",
+          "#e2b799",
+          "#e2b799",
+          "#e2b799",
+          "#e2b799",
+          "#e2b799",
         ],
       },
     ],
@@ -130,7 +130,7 @@ export default function Home() {
     scales: {
       x: {
         ticks: {
-          color: "rgba(0,0,0,0)",
+          color: "#00000000",
           padding: 30,
         },
       },
@@ -193,7 +193,7 @@ export default function Home() {
     <Flex
       height={"100vh"}
       width={"100vw"}
-      bgColor={"rgb(250, 236, 224)"}
+      bgColor={"#faece0"}
       justifyContent="center"
     >
       <Flex
@@ -232,10 +232,10 @@ export default function Home() {
                     : "The AI was trained on many traffic sign images. It analyzes the live camera feed and shows its predictions as bars. The taller the bar, the more confident the AI is in recognizing that sign."}
                 </Text>
                 <Button
-                  backgroundColor={"rgb(226,183,153)"}
+                  backgroundColor={"#e2b799"}
                   sx={{
                     "&:hover": {
-                      backgroundColor: "rgb(226,183,153)",
+                      backgroundColor: "#e2b799",
                       cursor: "none",
                     },
                   }}
@@ -271,7 +271,7 @@ export default function Home() {
                   padding: 0,
                   border: "solid 0px transparent",
                   borderRadius: "30px",
-                  backgroundColor: "rgb(226,183,153)",
+                  backgroundColor: "#e2b799",
                 }}
               />
             </Box>
