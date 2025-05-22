@@ -9,10 +9,10 @@ services:
     restart: on-failure
     environment:
       - PYTHONUNBUFFERED=1
-      - START_Y=200
-      - START_X=200
+      - START_Y=0
+      - START_X=0
       - ROTATION=0
-      - IMAGE_SIZE=800
+      - IMAGE_SIZE=1080
       - CAMERA_ID=0
       - NVIDIA_VISIBLE_DEVICES=all
     devices:
