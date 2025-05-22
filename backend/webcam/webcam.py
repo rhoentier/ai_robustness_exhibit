@@ -49,8 +49,11 @@ class Webcam:
             self.start_y : self.start_y + self.image_size,
             self.start_x : self.start_x + self.image_size,
         ]
-        (h, w) = image.shape[:2]
-        center = (w / 2, h / 2)
-        M = cv2.getRotationMatrix2D(center, self.rotation, 1.0)
-        image = cv2.warpAffine(image, M, (w, h))
+        if self.rotation == 90:
+            image = cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE)
+        elif self.rotation == 180:
+            image = cv2.rotate(image, cv2.ROTATE_180)
+        elif self.rotation == 270:
+            image = cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE)
+        
         return image
