@@ -1,7 +1,6 @@
 import {
   Box,
   VStack,
-  Image as ReactImage,
   Flex,
   Grid,
   GridItem,
@@ -176,7 +175,7 @@ export default function Home() {
       const ctx = chart.ctx;
       const xAxis = chart.scales["x"];
       const yAxis = chart.scales["y"];
-      
+
       xAxis.ticks.forEach((value, index) => {
         let x = xAxis.getPixelForTick(index);
         ctx.drawImage(
@@ -194,12 +193,12 @@ export default function Home() {
     <Flex
       height={"100vh"}
       width={"100vw"}
-      bgColor={"#E8E1D7"}
+      bgColor={"#FAEDE1"}
       justifyContent="center"
     >
       <Flex
-        marginTop={"8vh"}
-        marginBottom={"5vh"}
+        marginTop={"5vh"}
+        marginBottom={"4vh"}
         marginX={"80px"}
         borderBottom={"1px"}
         borderTop={"1px"}
@@ -207,54 +206,45 @@ export default function Home() {
         width={"100%"}
       >
         <Grid
-          templateRows="repeat(2, 1fr)"
-          templateColumns="repeat(3, 1fr)"
+          templateRows="repeat(6, 1fr)"
+          templateColumns="repeat(6, 1fr)"
           gap="5vh"
           width={"100%"}
         >
-          <GridItem rowSpan={2} colSpan={1}>
+          <GridItem rowSpan={6} colSpan={2}>
             <VStack
               justifyContent={"space-between"}
               alignItems={"flex-start"}
               height={"100%"}
               pr={"20px"}
-              pb={"00px"}
+              pb={"0px"}
             >
-              {language === "de" ? (
-                <Heading fontSize={"80px"} lineHeight={"96px"}>
-                  DIE KI FAHRSCHULE
-                </Heading>
-              ) : (
-                <Heading fontSize={"60px"} lineHeight={"86px"}>
-                  THE AI DRIVING SCHOOL
-                </Heading>
-              )}
+              <Heading fontSize={"60px"} fontWeight={"bold"}>
+                {language === "de"
+                  ? "LÄSST SICH DIESE KI TÄUSCHEN?"
+                  : "CAN THIS AI BE FOOLED?"}
+              </Heading>
 
               <VStack alignItems={"flex-start"} gap="50px">
-                {language === "de" ? (
-                  <Text fontSize={"18px"} lineHeight={"30px"}>
-                    Die Wahrscheinlichkeit, die dieses Exponat anzeigt, basieren
-                    auf den Ergebnissen eines KI-Modells, das auf einer Vielzahl
-                    von Verkehrszeichen trainiert wurde. Die Werte spiegeln die
-                    Unsicherheit und Variabilität wider, die bei der
-                    Interpretation von Verkehrszeichen auftreten können.
-                  </Text>
-                ) : (
-                  <Text fontSize={"18px"} lineHeight={"30px"}>
-                    The probabilities shown in this exhibit are based on the
-                    results of an AI model that has been trained on a large
-                    number of traffic signs. The values reflect the uncertainty
-                    and variability that can occur when interpreting traffic
-                    signs.
-                  </Text>
-                )}
+                <Text fontSize={"16px"} lineHeight={"30px"}>
+                  {language === "de"
+                    ? "Die KI wurde mit vielen Verkehrszeichen trainiert. Sie analysiert das Kamerabild und zeigt ihre Vorhersagen als Balken an. Je höher der Balken, desto sicherer ist sich die KI, dass es sich um dieses Verkehrszeichen handelt."
+                    : "The AI was trained on many traffic sign images. It analyzes the live camera feed and shows its predictions as bars. The taller the bar, the more confident the AI is in recognizing that sign."}
+                </Text>
                 <Button
-                  backgroundColor={"#DBC0A7"}
+                  backgroundColor={"#E2B799"}
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: "#E2B799",
+                      cursor: "none",
+                    },
+                  }}
                   fontSize={"22px"}
                   fontWeight={"400"}
                   px="35px"
                   borderRadius={"30px"}
                   height={"50px"}
+                  cursor={"none"}
                   onClick={() => setLanguage(language === "de" ? "en" : "de")}
                 >
                   {language === "de" ? "ENGLISH" : "DEUTSCH"}
@@ -262,15 +252,34 @@ export default function Home() {
               </VStack>
             </VStack>
           </GridItem>
-          <GridItem colSpan={2} rowSpan={1}>
-            <Box h={"47vh"} w={"47vh"} borderRadius="30px" overflow={"hidden"}>
-              <ReactImage src={imageBase64} h="100%" w="100%" />
+          <GridItem rowSpan={5} colSpan={4}>
+            <Box
+              h={"55vh"}
+              w={"55vh"}
+              borderRadius="30px"
+              overflow={"hidden"}
+              border={"solid 0px yellow"}
+            >
+              <img
+                src={imageBase64}
+                alt=""
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  display: "block",
+                  margin: 0,
+                  padding: 0,
+                  border: "solid 1px transparent",
+                  borderRadius: "30px",
+                  backgroundColor: "#E2B799",
+                }}
+              />
             </Box>
           </GridItem>
           <GridItem
             display={"flex"}
-            colSpan={2}
             rowSpan={1}
+            colSpan={4}
             alignItems={"flex-end"}
           >
             <Box h={"25vh"} w={"100%"} background={"none"}>
