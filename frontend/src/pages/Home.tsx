@@ -111,11 +111,11 @@ export default function Home() {
           ? Array.from(classification.values())
           : [0, 0, 0, 0, 0],
         backgroundColor: [
-          "#FF6835",
-          "#FF6835",
-          "#FF6835",
-          "#FF6835",
-          "#FF6835",
+          "rgb(226,183,153)",
+          "rgb(226,183,153)",
+          "rgb(226,183,153)",
+          "rgb(226,183,153)",
+          "#rgb(226,183,153)",
         ],
       },
     ],
@@ -193,7 +193,7 @@ export default function Home() {
     <Flex
       height={"100vh"}
       width={"100vw"}
-      bgColor={"rgb(250,236,224)"}
+      bgColor={"rgb(250, 236, 224)"}
       justifyContent="center"
     >
       <Flex
