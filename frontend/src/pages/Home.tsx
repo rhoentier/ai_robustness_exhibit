@@ -193,7 +193,7 @@ export default function Home() {
     <Flex
       height={"100vh"}
       width={"100vw"}
-      bgColor={"#FAEDE1"}
+      bgColor={"rgb(250,236,224)"}
       justifyContent="center"
     >
       <Flex
@@ -232,10 +232,10 @@ export default function Home() {
                     : "The AI was trained on many traffic sign images. It analyzes the live camera feed and shows its predictions as bars. The taller the bar, the more confident the AI is in recognizing that sign."}
                 </Text>
                 <Button
-                  backgroundColor={"#E2B799"}
+                  backgroundColor={"rgb(226,183,153)"}
                   sx={{
                     "&:hover": {
-                      backgroundColor: "#E2B799",
+                      backgroundColor: "rgb(226,183,153)",
                       cursor: "none",
                     },
                   }}
@@ -252,7 +252,7 @@ export default function Home() {
               </VStack>
             </VStack>
           </GridItem>
-          <GridItem rowSpan={5} colSpan={4}>
+          <GridItem rowSpan={5} colSpan={3}>
             <Box
               h={"55vh"}
               w={"55vh"}
@@ -269,12 +269,28 @@ export default function Home() {
                   display: "block",
                   margin: 0,
                   padding: 0,
-                  border: "solid 1px transparent",
+                  border: "solid 0px transparent",
                   borderRadius: "30px",
-                  backgroundColor: "#E2B799",
+                  backgroundColor: "rgb(226,183,153)",
                 }}
               />
             </Box>
+          </GridItem>
+          <GridItem
+            rowSpan={5}
+            colSpan={1}
+            display={"flex"}
+            justifyContent={"flex-end"}
+            alignItems={"flex-end"}
+          >
+            <img
+              src={
+                language === "de"
+                  ? "/images/arrow/Arrow_DE.png"
+                  : "/images/arrow/Arrow_EN.png"
+              }
+              alt=""
+            />
           </GridItem>
           <GridItem
             display={"flex"}
