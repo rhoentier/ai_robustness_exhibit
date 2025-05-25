@@ -1,0 +1,30 @@
+services:
+  frontend:
+    build: ./frontend
+    volumes:
+      - frontend_build:/app/build
+
+  backend:
+    build: ./backend
+    restart: on-failure
+    environment:
+      - PYTHONUNBUFFERED=1
+      - START_Y=0
+      - START_X=0
+      - ROTATION=0
+      - IMAGE_SIZE=1080
+      - CAMERA_ID=0
+      - NVIDIA_VISIBLE_DEVICES=all
+    devices:
+      - /dev/video1
+      - /dev/video0
+    volumes:
+      - /usr/local/cuda:/usr/local/cuda
+      - frontend_build:/app/build
+    ports:
+      - 9000:9000
+    depends_on:
+      - frontend
+
+volumes:
+  frontend_build:

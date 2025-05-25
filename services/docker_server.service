@@ -1,0 +1,15 @@
+[Unit]
+Description=Docker StartUp
+After=docker.service network.target
+Requires=docker.service
+
+[Service]
+Type=simple
+User=[USER]
+WorkingDirectory=[DIRECTORY]
+ExecStart=/usr/bin/docker compose up
+ExecStop=/usr/bin/docker compose down
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
