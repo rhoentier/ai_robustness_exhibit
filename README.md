@@ -119,6 +119,65 @@ Configure Openbox to start automatically on boot and set up autostart to ensure 
 3. Hide the cursor if not needed for interaction
 4. Consider disabling system notifications
 
+## System Monitoring and Maintenance
+
+### Monitoring systemd Services
+
+The exhibit uses two systemd services: `docker_server.service` and `chromium.service`. Here's how to monitor them:
+
+1. **Check service status**:
+   ```
+   sudo systemctl status docker_server.service
+   sudo systemctl status chromium.service
+   ```
+
+2. **View service logs**:
+   ```
+   # View all logs for a service
+   sudo journalctl -u docker_server.service
+   sudo journalctl -u chromium.service
+   
+   # View only the most recent logs
+   sudo journalctl -u docker_server.service -n 50
+   
+   # Follow logs in real-time
+   sudo journalctl -u docker_server.service -f
+   ```
+
+3. **Restart services if needed**:
+   ```
+   sudo systemctl restart docker_server.service
+   sudo systemctl restart chromium.service
+   ```
+
+### Monitoring System Resources
+
+To monitor system resources in the terminal:
+
+1. **CPU and Memory Usage**:
+   ```
+   # Real-time system resource monitoring
+   htop
+   ```
+
+2. **Docker Resource Usage**:
+   ```
+   # View running containers
+   docker ps
+   
+   # Check container resource usage
+   docker stats
+   
+   # View container logs
+   docker logs <container_id>
+   ```
+
+3. **GPU Usage** (for NVIDIA GPUs):
+   ```
+   # Check GPU usage
+   nvidia-smi
+   ```
+
 ## Extending the Software
 
 ### Modifying the Frontend
