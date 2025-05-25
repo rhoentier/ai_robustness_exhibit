@@ -178,6 +178,50 @@ To monitor system resources in the terminal:
    nvidia-smi
    ```
 
+### System Updates
+
+#### Using Topgrade for System Updates
+
+Topgrade is a tool that helps update everything on your system. To use it:
+
+   ```
+   topgrade
+   ```
+   This will update your system packages, firmware, and various package managers.
+
+#### Updating Python Packages
+
+To update the Python packages used in this project:
+
+1. **Navigate to the backend directory**:
+   ```
+   cd backend
+   ```
+
+2. **Update all packages in requirements.txt**:
+   ```
+   pip-review --auto
+   ```
+
+3. **Update requirements.txt**:
+   ```
+   pip freeze > requirements.txt
+   ```
+
+#### Updating Node Packages
+
+To update the Node.js packages used in the frontend:
+
+1. **Navigate to the frontend directory**:
+   ```
+   cd frontend
+   ```
+
+2. **Update all packages**:
+   ```
+   npm update
+   ```
+
 ## Extending the Software
 
 ### Modifying the Frontend
