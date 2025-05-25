@@ -18,8 +18,8 @@ Feel free to use this code within another exhibition. Please open an issue to li
 ### Prerequisites
 
 1. Install Docker and follow Docker post installation steps
-2. Install cuda-toolkit (if you use nivida gpu)
-3. Install nvidia-container-toolkit (if you use nivida gpu)
+2. Install cuda-toolkit (if you use NVIDIA GPU)
+3. Install nvidia-container-toolkit (if you use NVIDIA GPU)
 4. Install git and git-lfs
 5. Clone repository and pull models via `git lfs pull`
 
@@ -28,16 +28,128 @@ Feel free to use this code within another exhibition. Please open an issue to li
 You can start the software via docker compose.
 
 ```
-docker compose -f docker-compose.yml up  -d
+docker compose -f docker-compose.yml up -d
 ```
 
-You can configure the camera settings in the docker-compose files.
+You can configure the camera settings in the docker-compose.yml file. The following environment variables can be adjusted:
 
-Open `localhost:9000` in your web browser.
+- `START_Y`: Y-coordinate starting point for camera crop (default: 0)
+- `START_X`: X-coordinate starting point for camera crop (default: 0)
+- `ROTATION`: Camera image rotation in degrees (0, 90, 180, or 270)
+- `IMAGE_SIZE`: Size of the captured image (default: 1080)
+- `CAMERA_ID`: Camera device ID to use (default: 0)
 
-### Develop Software
+Open `localhost:9000` in your web browser to view the application.
 
-The software is an easy flask backend server and and react frontend.
+## Project Architecture
+
+### Overview
+
+The project consists of two main components:
+
+1. **Backend**: A Flask application that handles webcam capture, image processing, and AI model inference
+2. **Frontend**: A React application that displays the webcam feed and classification results
+
+### Backend Components
+
+- **Flask Server** (`backend/app.py`): Main entry point that sets up the Flask application and WebSocket communication
+- **Webcam Module** (`backend/webcam/`): Handles camera capture and image processing
+- **Classifier Module** (`backend/Classifier/`): Provides the framework for classification
+- **Traffic Sign AI Module** (`backend/traffic_sign_ai/`): Contains the AI models and classification logic
+
+### Frontend Components
+
+- **React Application** (`frontend/src/`): Single-page application built with React and TypeScript
+- **Home Page** (`frontend/src/pages/Home.tsx`): Main UI component that displays the webcam feed and classification results
+
+### Communication Flow
+
+1. The backend captures images from the webcam
+2. Images are processed and classified by the AI models
+3. Results are sent to the frontend via WebSocket
+4. The frontend displays the results in real-time
+
+## Development Guide
+
+The software consists of a Flask backend server and a React frontend.
+
+## Setting Up the Exhibit Environment
+
+For a production exhibit environment, you should set up the system to automatically start the application on boot and display it in kiosk mode. This section explains how to configure this.
+
+### Using the Service Files
+
+The `services` folder contains systemd service files that can be used to automatically start the application:
+
+1. `docker_server.service` - Starts the Docker containers for the application
+2. `chromium.service` - Starts Chromium in kiosk mode to display the application
+
+To use these service files:
+
+1. Copy the service files to `/etc/systemd/system/`
+2. Replace `[USER]` with your username in both files
+3. Replace `[DIRECTORY]` with the full path to the project directory
+4. Enable the services to start on boot:
+   ```
+   sudo systemctl reload-daemon
+   sudo systemctl enable docker_server.service
+   sudo systemctl enable chromium.service
+   ```
+5. Start the services:
+   ```
+   sudo systemctl start docker_server.service
+   sudo systemctl start chromium.service
+   ```
+
+### Recommended Window Manager
+
+For exhibit environments, it's recommended to use a minimal window manager like Openbox instead of a full desktop environment. This provides several advantages:
+
+- Minimal resource usage
+- Fewer background processes that could interfere with the exhibit
+- Better control over the display and user interaction
+- Prevents unwanted UI elements from appearing
+
+Configure Openbox to start automatically on boot and set up autostart to ensure only the necessary applications run.
+
+### Additional Exhibit Environment Tips
+
+1. Disable screen blanking/screensaver
+2. Configure automatic login
+3. Hide the cursor if not needed for interaction
+4. Consider disabling system notifications
+
+## Extending the Software
+
+### Modifying the Frontend
+
+The frontend is built with React and TypeScript using Chakra UI for styling and Chart.js for visualization.
+
+1. Navigate to the `frontend` directory
+2. Install dependencies with `npm install`
+3. Make your changes to the source files in `frontend/src/`
+4. Test your changes with `npm start`
+5. Build the production version with `npm run build`
+
+Key files to modify:
+- `frontend/src/pages/Home.tsx`: Main UI component
+- `frontend/src/index.css`: Styling
+- `frontend/public/images/`: Image assets
+
+### Modifying the Backend
+
+The backend is built with Flask and uses PyTorch for AI model inference.
+
+1. Navigate to the `backend` directory
+2. Install dependencies with `pip install -r requirements.txt`
+3. Make your changes to the source files
+4. Test your changes by running `python app.py`
+
+Key modules to modify:
+- `backend/app.py`: Main Flask application
+- `backend/webcam/`: Webcam capture and processing
+- `backend/Classifier/`: Classification framework
+- `backend/traffic_sign_ai/`: AI models and inference
 
 ## Acknowledgements
 

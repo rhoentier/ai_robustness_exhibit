@@ -1,0 +1,15 @@
+[Unit]
+Description=Chromium Kiosk
+Wants=graphical.target
+After=graphical.target network.target docker_server.service
+
+[Service]
+Type=simple
+User=[USER]
+Environment=DISPLAY=:0
+ExecStart=/usr/bin/chromium-browser --kiosk --start-maximized --noerrdialogs --disable-translate --no-first-run --fast --fast-start --disable-infobars --disable-features=TranslateUI --incognito http://localhost:9000/
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=graphical.target

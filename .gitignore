@@ -1,6 +1,5 @@
 
 /backend/traffic_sign_ai/datasets/gtsrb_dataset/
-*.service
 
 # Created by https://www.toptal.com/developers/gitignore/api/intellij,flask,visualstudiocode,python,node,react,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=intellij,flask,visualstudiocode,python,node,react,macos
