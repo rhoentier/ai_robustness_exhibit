@@ -290,6 +290,11 @@ export default function Home() {
                   : "/images/arrow/Arrow_EN.png"
               }
               alt=""
+              style={{
+                height: "204px",
+                width: "auto",
+                maxWidth: "none",
+              }}
             />
           </GridItem>
           <GridItem
