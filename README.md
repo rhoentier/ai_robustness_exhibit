@@ -222,6 +222,23 @@ To update the Node.js packages used in the frontend:
    npm update
    ```
 
+3. **Update to latest versions (including major versions)**:
+  ```
+  npx npm-check-updates -u
+  npm install
+  ```
+
+### Automated Dependency Updates with Dependabot
+
+This project uses GitHub's Dependabot to automatically check for outdated dependencies and create pull requests when updates are available. The configuration is stored in `.github/dependabot.yml` and covers:
+
+- Python dependencies for the backend
+- Node.js dependencies for the frontend
+- Docker images for both backend and frontend
+- GitHub Actions workflows
+
+Dependabot will create pull requests on a weekly basis, which you can review and merge as needed. This helps keep the project dependencies up-to-date and secure.
+
 ## Extending the Software
 
 ### Modifying the Frontend
