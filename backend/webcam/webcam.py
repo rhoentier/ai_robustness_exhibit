@@ -29,7 +29,10 @@ class Webcam:
 
         self.cap = cv2.VideoCapture(self.camera_id, cv2.CAP_V4L2)
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 4096)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 4096)
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 2160)
+        actual_width = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+        actual_height = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        print(f"Requested: 4096x2160, Actual: {actual_width}x{actual_height}")
         t = threading.Thread(target=self._reader)
         t.daemon = True
         t.start()
