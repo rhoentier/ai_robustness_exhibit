@@ -27,7 +27,7 @@ class Webcam:
         if "ROTATION" in os.environ:
             self.rotation = int(os.environ["ROTATION"])
 
-        self.cap = cv2.VideoCapture(self.camera_id, cv2.CAP_V4L2)
+        self.cap = cv2.VideoCapture(self.camera_id, cv2.CAP_FFMPEG)
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 4096)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 2160)
         actual_width = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
