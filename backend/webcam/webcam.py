@@ -29,7 +29,7 @@ class Webcam:
 
         self.cap = cv2.VideoCapture(self.camera_id, cv2.CAP_V4L2)
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 4096)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 2160)
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 4096)
         t = threading.Thread(target=self._reader)
         t.daemon = True
         t.start()
