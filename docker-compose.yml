@@ -9,15 +9,17 @@ services:
     restart: on-failure
     environment:
       - PYTHONUNBUFFERED=1
-      - START_Y=0
-      - START_X=0
+      - START_Y=50
+      - START_X=50
       - ROTATION=0
-      - IMAGE_SIZE=1080
+      - IMAGE_SIZE=4096
       - CAMERA_ID=0
       - NVIDIA_VISIBLE_DEVICES=all
     devices:
-      - /dev/video1
       - /dev/video0
+      - /dev/video1
+      - /dev/video2
+      - /dev/video3
     volumes:
       - /usr/local/cuda:/usr/local/cuda
       - frontend_build:/app/build

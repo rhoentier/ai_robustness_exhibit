@@ -27,7 +27,7 @@ class Webcam:
         if "ROTATION" in os.environ:
             self.rotation = int(os.environ["ROTATION"])
 
-        self.cap = cv2.VideoCapture(self.camera_id)
+        self.cap = cv2.VideoCapture(self.camera_id, cv2.CAP_V4L2)
         t = threading.Thread(target=self._reader)
         t.daemon = True
         t.start()
@@ -55,5 +55,5 @@ class Webcam:
             image = cv2.rotate(image, cv2.ROTATE_180)
         elif self.rotation == 270:
             image = cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE)
-        
+
         return image
