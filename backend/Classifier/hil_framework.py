@@ -20,7 +20,7 @@ class Models(Enum):
 class HilFramework:
 
     def __init__(self):
-        self.classification_model = load_self_trained_inception_net3()
+        self.classification_model = load_pretrained_resnext()
         self.heatmap_model = load_self_trained_inception_net3()
 
     def run_heatmap_attack(self, image, original_label):
