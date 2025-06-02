@@ -7,7 +7,7 @@ After=graphical.target network.target docker_server.service
 Type=simple
 User=[USER]
 Environment=DISPLAY=:0
-ExecStart=/usr/bin/chromium-browser --kiosk --start-maximized --noerrdialogs --disable-translate --no-first-run --fast --fast-start --disable-infobars --disable-features=TranslateUI --incognito http://localhost:9000/
+ExecStart=/usr/bin/chromium-browser --kiosk --start-maximized --noerrdialogs --hide-crash-restore-bubble --disable-translate --disable-pinch --disable-infobars --disable-features=TranslateUI --disable-touch-drag-drop --disable-pull-to-refresh-effect --no-first-run --fast --fast-start --incognito http://localhost:9000/
 Restart=on-failure
 RestartSec=5
 
